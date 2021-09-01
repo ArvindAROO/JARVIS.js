@@ -1,3 +1,13 @@
+#env variables
+.env
+*.env
+
+#package-lock
+package-lock.json
+
+#.eslintrc 
+.eslintrc.json
+
 # Logs
 logs
 *.log

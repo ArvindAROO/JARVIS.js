@@ -1,0 +1,27 @@
+{
+  "name": "jarvis",
+  "version": "1.0.0",
+  "description": "J.A.R.V.I.S rewrite in discord.js",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js-commando": "^0.12.3",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArvindAROO/JARVIS.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArvindAROO/JARVIS.js/issues"
+  },
+  "homepage": "https://github.com/ArvindAROO/JARVIS.js#readme"
+}
