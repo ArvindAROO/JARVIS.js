@@ -18,6 +18,10 @@ const client = new Client(
 	{intents : botIntents}
 );
 
+const BOTDEV = 750556082371559485;
+const MOD = 742798158966292640;
+const ADMIN = 742800061280550923;
+
 client.once('ready', () => {
 	console.log('Ready!');
 });
@@ -33,10 +37,13 @@ function getUserFromMention(message, mention) {
 
 	return message.guild.members.cache.get(id);
 }
+function canManageServer(message){
+	//see if the current message author is worthy of the command
+	return message.member.roles.cache.some(role => role.id == BOTDEV ||  role.id == MOD || role.id == ADMIN );
 
+}
 
 client.on('messageCreate', message => {
-
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 	//ignore if no prefix
 
@@ -53,7 +60,7 @@ client.on('messageCreate', message => {
         message.channel.send({ content: 'hello', reply: { messageReference: message.id } });
 		message.reply("Hi");
     }else if(command == "mute"){
-		if(message.author.id == 757089909256224818){
+		if(canManageServer(message)){
 
 			if (args[0]) {
 				const userObj = getUserFromMention(message, args[0]);
@@ -75,7 +82,7 @@ client.on('messageCreate', message => {
 		}
 		
 	}else if(command == "unmute"){
-		if(message.author.id == 757089909256224818){
+		if(canManageServer(message)){
 			if (args[0]) {
 				const userObj = getUserFromMention(message, args[0]);
 
@@ -95,15 +102,42 @@ client.on('messageCreate', message => {
 		}
 	}
 	else if(command === "kick"){
-		if(message.author.id == 757089909256224818){
+		if(canManageServer(message)){
 			if (args[0]) {
 				const userObj = getUserFromMention(message, args[0]);
+				
 
 				if (!userObj) {
 					return message.reply('Mention the user');
 				}
-			userObj.kick();
-			return message.channel.send({content: "kick successful"});
+				userObj.kick();
+				return message.channel.send({content: "kick successful"});
+			}
+			message.reply("User Not Found, mention properly");
+		}
+	}
+	else if(command === "kid"){
+		if(args[0]){
+			const userObj = getUserFromMention(message, args[0]);
+			if (canManageServer(message)) {
+				
+
+				if (!userObj) {
+					return message.reply('Mention the user');
+				}
+				var justJoined = message.guild.roles.cache.find(role => role.name === "Just Joined");
+				var keed = message.guild.roles.cache.find(role => role.name === "This Just In");
+				if(justJoined && keed && userObj){
+					userObj.roles.remove(justJoined);
+					userObj.roles.add(keed);
+					return message.channel.send({content: "successful " + userObj.displayName});
+				}
+				else{
+					message.reply("failed, try again");
+				}
+
+			}else{
+				return message.reply("You aint worthy");
 			}
 			message.reply("User Not Found, mention properly");
 		}
