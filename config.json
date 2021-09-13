@@ -1,0 +1,13 @@
+{
+    "prefix": "+",
+    "commands": [
+        "ping",
+        "beep",
+        "hello",
+        "mute",
+        "unmute",
+        "kick",
+        "kid"
+    ]
+  }
+  
