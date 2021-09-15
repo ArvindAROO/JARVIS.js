@@ -57,6 +57,8 @@ client.on("messageCreate", (message) => {
             commandFunctions.kid(message, args);
         } else if (command == "contribute" || command == "support") {
             commandFunctions.support(message);
+        } else if (command == "nick" || command ==  "changenick"){
+            commandFunctions.nick(message, args)
         }
     } else {
         message.channel.send({

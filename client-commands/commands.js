@@ -127,6 +127,24 @@ module.exports = {
             message.reply("User Not Found, mention properly");
         }
     },
+    nick: function(message, args){
+        if (args[0]){
+            const userObj = this.getUserFromMention(message, args[0]);
+            if (this.canManageServer(message)) {
+                if (!userObj) {
+                    return message.reply("Mention the user");
+                }
+                args.shift(); //remove the first userid object
+                args = args.join(' ') //convert the words into one string
+                return userObj.setNickname(args);
+
+            }else{
+                return message.reply("Not to you lmao");
+            }
+
+        }
+        
+    },
 	support: function(message) {
 		return message.reply("You can contribute to the bot here\nhttps://github.com/ArvindAROO/JARVIS.js")
 	}
