@@ -9,7 +9,8 @@
         "kick",
         "kid",
         "support", "contribute",
-        "nick", "changenick"
+        "nick", "changenick",
+        "ban"
     ]
   }
   

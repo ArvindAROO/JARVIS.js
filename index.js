@@ -12,6 +12,7 @@ const config = require('./config.json');
 const prefix = config["prefix"];
 const availableCommands = config["commands"];
 
+
 const { Client, Intents } = require("discord.js");
 const botIntents = new Intents();
 botIntents.add(
@@ -58,7 +59,9 @@ client.on("messageCreate", (message) => {
         } else if (command == "contribute" || command == "support") {
             commandFunctions.support(message);
         } else if (command == "nick" || command ==  "changenick"){
-            commandFunctions.nick(message, args)
+            commandFunctions.nick(message, args);
+        } else if (command == "ban"){
+            commandFunctions.ban(message, args);
         }
     } else {
         message.channel.send({
