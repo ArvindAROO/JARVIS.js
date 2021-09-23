@@ -10,7 +10,8 @@
         "kid",
         "support", "contribute",
         "nick", "changenick",
-        "ban"
+        "ban", "unban",
+        "purge", "p"
     ]
   }
   

@@ -22,18 +22,6 @@ module.exports = {
         });
     },
 
-    getUserFromMention: function (message, mention) {
-        // The id is the first and only match found by the RegEx.
-        // a mention will be in the form of <@userid> or <@!userid>
-        const matches = mention.match(/^<@!?(\d+)>$/);
-
-        // If supplied variable was not a mention, matches will be null instead of an array.
-        if (!matches) return;
-
-        const id = matches[1];
-
-        return message.guild.members.cache.get(id);
-    },
     mute: function (message, args) {
         let mutetime = args[1];   
         if(!mutetime) {return message.reply("You didn't specify a time!");};
@@ -42,7 +30,7 @@ module.exports = {
         //return if time not mentioned and convert the time into milliseconds
         if (this.canManageServer(message)) {
             if (args[0]) {
-                const userObj = this.getUserFromMention(message, args[0]);
+                const userObj = message.mentions.members.first(); //this.getUserFromMention(message, args[0]);
 
                 if (!userObj) {
                     return message.reply("Mention the user");
@@ -77,7 +65,7 @@ module.exports = {
     unmute: function (message, args) {
         if (this.canManageServer(message)) {
             if (args[0]) {
-                const userObj = this.getUserFromMention(message, args[0]);
+                const userObj = message.mentions.members.first();
 
                 if (!userObj) {
                     return message.reply("Mention the user");
@@ -130,7 +118,7 @@ module.exports = {
     kick: function (message, args) {
         if (this.canManageServer(message)) {
             if (args[0]) {
-                const userObj = this.getUserFromMention(message, args[0]);
+                const userObj = message.mentions.members.first();
 
                 if (!userObj) {
                     return message.reply("Mention the user");
@@ -144,7 +132,7 @@ module.exports = {
     ban: function (message, args) {
         if (this.canManageServer(message)) {
             if (args[0]) {
-                const userObj = this.getUserFromMention(message, args[0]);
+                const userObj = message.mentions.members.first();
 
                 if (!userObj) {
                     return message.reply("Mention the user lawda, just check if he is on server first");
@@ -155,7 +143,23 @@ module.exports = {
             message.reply("Mention properly lawda. Last time you didnt mention properly dear PESU bot was kicked");
         }
     },
-    
+    unban: function (message, args) {
+        // ! not functional yet, getting userObject without the cache in the server is deprecated
+        if (this.canManageServer(message)) {
+            if (args[0]) {
+                const userObj = message.mentions.members.first();
+                let id = userObj.id;
+                console.log(id);
+                if (!userObj) {
+                    return message.reply("Mention the user lawda, just check if he is on server first");
+                }
+                
+                message.guild.members.unban(id);
+                return message.channel.send({ content: "unban successful" });
+            }
+            message.reply("Mention properly");
+        }
+    },
     kid: function (message, args) {
         if (args[0]) {
             const userObj = this.getUserFromMention(message, args[0]);
@@ -206,6 +210,7 @@ module.exports = {
 		return message.reply("You can contribute to the bot here\nhttps://github.com/ArvindAROO/JARVIS.js")
 	},
     error: function(err){
+        //upon any errors all will be dumped to BotLogs channel
         let BotLogs = this.client.channels.cache.get('749473757843947671')
         BotLogs.send({ content: "Error occured "+ err })
     }
