@@ -62,6 +62,10 @@ client.on("messageCreate", (message) => {
             commandFunctions.nick(message, args);
         } else if (command == "ban"){
             commandFunctions.ban(message, args);
+        } else if (command == "unban"){
+            commandFunctions.unban(message, args);
+        } else if(command == "p" || command == "purge"){
+            commandFunctions.purge(message, args);
         }
     } else {
         message.channel.send({
@@ -72,7 +76,8 @@ client.on("messageCreate", (message) => {
 });
 
 process.on("uncaughtException", function (err) {
-    console.log("Caught exception: " + err);
+    commandFunctions.error(err);
+    // console.log("Caught exception: " + err);
 });
 
 // Login to Discord with your client's token
