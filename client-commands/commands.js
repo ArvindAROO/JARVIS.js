@@ -38,7 +38,7 @@ module.exports = {
         let mutetime = args[1];   
         if(!mutetime) {return message.reply("You didn't specify a time!");};
         mutetimeInms = ms(mutetime);
-        if(! (mutetimeInms > 1 && mutetimeInms < 1296000000 )){return message.reply("Think this is a joke? How can you mute anyone for that amount");};
+        if(! (mutetimeInms > 29999 && mutetimeInms < 1296000000 )){return message.reply("Think this is a joke? How can you mute anyone for that amount");};
         //return if time not mentioned and convert the time into milliseconds
         if (this.canManageServer(message)) {
             if (args[0]) {
@@ -100,6 +100,33 @@ module.exports = {
             return messagereply("No");
         }
     },
+    purge: function(message, args) {
+        if (this.canManageServer(message)) {
+            if (args[0]) {
+                let messageCount = 1 + Number(args);
+                if(Number.isNaN(messageCount)|| messageCount < 1){return message.reply("purge what?")}
+                message.channel.messages.fetch({
+                        limit: messageCount
+                    })
+                    .then(messages => {
+                        message.channel.bulkDelete(messages);
+                    
+                        message.channel
+                            .send(
+                                "Deletion of messages successful. \nTotal messages deleted including command: " +
+                                messageCount
+                            )
+                    })
+    
+            } else {
+                return message.reply("Mention the number of messages to be purged");
+            }
+        } else {
+            return messagereply("No");
+        }
+    },
+
+
     kick: function (message, args) {
         if (this.canManageServer(message)) {
             if (args[0]) {
@@ -128,6 +155,7 @@ module.exports = {
             message.reply("Mention properly lawda. Last time you didnt mention properly dear PESU bot was kicked");
         }
     },
+    
     kid: function (message, args) {
         if (args[0]) {
             const userObj = this.getUserFromMention(message, args[0]);
@@ -176,5 +204,9 @@ module.exports = {
     },
 	support: function(message) {
 		return message.reply("You can contribute to the bot here\nhttps://github.com/ArvindAROO/JARVIS.js")
-	}
+	},
+    error: function(err){
+        let BotLogs = this.client.channels.cache.get('749473757843947671')
+        BotLogs.send({ content: "Error occured "+ err })
+    }
 };
