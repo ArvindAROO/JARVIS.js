@@ -5,7 +5,6 @@
     TODO: The current error handling feels very inefficient
 	! Warning: Use only discord.js v13 and Node 16.6 or higher !
 */
-
 require("dotenv").config();
 const TOKEN = process.env.TOKEN;
 
@@ -14,7 +13,10 @@ const prefix = config["prefix"];
 const availableCommands = config["commands"];
 
 
-const { Client, Intents } = require("discord.js");
+const {
+    Client,
+    Intents
+} = require("discord.js");
 const botIntents = new Intents();
 botIntents.add(
     Intents.FLAGS.GUILDS,
@@ -22,7 +24,9 @@ botIntents.add(
     Intents.FLAGS.GUILD_PRESENCES
 );
 // Create a new client instance
-const client = new Client({ intents: botIntents });
+const client = new Client({
+    intents: botIntents
+});
 
 const commandFunctions = require("./client-commands/commands.js");
 
@@ -37,7 +41,7 @@ client.on("messageCreate", (message) => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
-    if (availableCommands.includes(command)){
+    if (availableCommands.includes(command)) {
         if (command === "ping") {
             commandFunctions.ping(message);
         } else if (command == "mute") {
@@ -50,24 +54,26 @@ client.on("messageCreate", (message) => {
             commandFunctions.kid(message, args);
         } else if (command == "contribute" || command == "support") {
             commandFunctions.support(message);
-        } else if (command == "nick" || command ==  "changenick"){
+        } else if (command == "nick" || command == "changenick") {
             commandFunctions.nick(message, args);
-        } else if (command == "ban"){
+        } else if (command == "ban") {
             commandFunctions.ban(message, args);
-        } else if (command == "unban"){
+        } else if (command == "unban") {
             commandFunctions.unban(message, args);
-        } else if(command == "p" || command == "purge"){
+        } else if (command == "p" || command == "purge") {
             commandFunctions.purge(message, args);
         }
     } else {
         message.channel.send({
             content: "I have no response for this shit",
-            reply: { messageReference: message.id },
+            reply: {
+                messageReference: message.id
+            },
         });
     }
 });
 
-process.on("uncaughtException", function (err) {
+process.on("uncaughtException", function(err) {
     commandFunctions.error(err);
     // console.log("Caught exception: " + err);
 });
