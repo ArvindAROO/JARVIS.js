@@ -2,6 +2,7 @@
 	DONE - TODO: The commands must be exported to `client-commands/commands.js`
 	TODO: Improve readability of code
 	DONE - TODO: All the command access are given by hardcodeduserid values, need to shift them to role based perms
+    TODO: The current error handling feels very inefficient
 	! Warning: Use only discord.js v13 and Node 16.6 or higher !
 */
 
@@ -39,15 +40,6 @@ client.on("messageCreate", (message) => {
     if (availableCommands.includes(command)){
         if (command === "ping") {
             commandFunctions.ping(message);
-        } else if (command === "beep") {
-            message.channel.send("Boop.");
-        } else if (command === "hello") {
-            //testing reply functions
-            message.channel.send({
-                content: "hello",
-                reply: { messageReference: message.id },
-            });
-            message.reply("Hi");
         } else if (command == "mute") {
             commandFunctions.mute(message, args);
         } else if (command == "unmute") {

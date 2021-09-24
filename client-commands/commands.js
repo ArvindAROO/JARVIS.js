@@ -152,22 +152,42 @@ module.exports = {
             message.reply("Mention properly lawda. Last time you didnt mention properly dear PESU bot was kicked");
         }
     },
-    unban: function (message, args) {
-        // ! not functional yet, getting userObject without the cache in the server is deprecated
+    unban: function(message, args) {
+        // FIXED - * not functional yet, getting userObject without the cache in the server is deprecated *
         this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
-                const userObj = message.mentions.members.first();
-                let id = userObj.id;
-                console.log(id);
-                if (!userObj) {
-                    return message.reply("Mention the user lawda, just check if he is on server first");
-                }
+                let userID = args[0].includes('<@!') ? args[0].replace('<@!', '').replace('>', '') :
+                    args[0].includes('<@') ? args[0].replace('<@', '').replace('>', '') : '';
                 
-                message.guild.members.unban(id);
-                return message.channel.send({ content: "unban successful" });
+                if (userID == '') {
+                    return message.reply('Invalid user ID or mention.');
+                }
+    
+                message.guild.bans.fetch().then(bans => {
+                    //bans is of type "Map" defined in js.
+                    let isBanned = false;
+                    bans.forEach((value, key) => {
+                        if (key == userID) {
+                            //see if the mentioned user is actually banned
+                            isBanned = true;
+                        }
+                    });
+                    if (isBanned) {
+                        message.reply("yup person is banned");
+                        let userObj = bans.find(allBans => allBans.user.id == userID) //get his bannedUserObj from the Map of his bans from the object 'bans'
+                        message.guild.members.unban(userObj.user);
+                        return message.reply("unban successful");
+                    } else {
+                        return message.reply("The user isnt banned");
+                    }
+    
+    
+                });
+    
+            } else {
+                return message.reply("Mention who you want to unban");
             }
-            message.reply("Mention properly");
         }
     },
     kid: function (message, args) {
