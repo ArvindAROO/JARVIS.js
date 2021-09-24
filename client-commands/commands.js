@@ -2,11 +2,14 @@
 const BOTDEV = 750556082371559485;
 const MOD = 742798158966292640;
 const ADMIN = 742800061280550923;
+const BOTLOGS = '749473757843947671';
+
 let ms = require('ms');
 
 module.exports = {
     init: function (client) {
         this.client = client;
+        this.message = NaN;
     },
     canManageServer: function (message) {
         //see if the current message author is worthy of the command
@@ -15,6 +18,7 @@ module.exports = {
         );
     },
     ping: function (message) {
+        this.message = message;
         message.channel.send({
             content: `Latency is ${
                 Date.now() - message.createdTimestamp
@@ -23,6 +27,7 @@ module.exports = {
     },
 
     mute: function (message, args) {
+        this.message = message;
         let mutetime = args[1];   
         if(!mutetime) {return message.reply("You didn't specify a time!");};
         mutetimeInms = ms(mutetime);
@@ -63,6 +68,7 @@ module.exports = {
         }
     },
     unmute: function (message, args) {
+        this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
                 const userObj = message.mentions.members.first();
@@ -89,10 +95,11 @@ module.exports = {
         }
     },
     purge: function(message, args) {
+        this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
                 let messageCount = 1 + Number(args);
-                if(Number.isNaN(messageCount)|| messageCount < 1){return message.reply("purge what?")}
+                // if(Number.isNaN(messageCount)|| messageCount < 1){return message.reply("purge what?")}
                 message.channel.messages.fetch({
                         limit: messageCount
                     })
@@ -116,6 +123,7 @@ module.exports = {
 
 
     kick: function (message, args) {
+        this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
                 const userObj = message.mentions.members.first();
@@ -130,6 +138,7 @@ module.exports = {
         }
     },
     ban: function (message, args) {
+        this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
                 const userObj = message.mentions.members.first();
@@ -145,6 +154,7 @@ module.exports = {
     },
     unban: function (message, args) {
         // ! not functional yet, getting userObject without the cache in the server is deprecated
+        this.message = message;
         if (this.canManageServer(message)) {
             if (args[0]) {
                 const userObj = message.mentions.members.first();
@@ -161,6 +171,7 @@ module.exports = {
         }
     },
     kid: function (message, args) {
+        this.message = message;
         if (args[0]) {
             const userObj = this.getUserFromMention(message, args[0]);
             if (this.canManageServer(message)) {
@@ -189,6 +200,7 @@ module.exports = {
         }
     },
     nick: function(message, args){
+        this.message = message;
         if (args[0]){
             const userObj = this.getUserFromMention(message, args[0]);
             if (this.canManageServer(message)) {
@@ -207,11 +219,13 @@ module.exports = {
         
     },
 	support: function(message) {
+        this.message = message;
 		return message.reply("You can contribute to the bot here\nhttps://github.com/ArvindAROO/JARVIS.js")
 	},
     error: function(err){
         //upon any errors all will be dumped to BotLogs channel
-        let BotLogs = this.client.channels.cache.get('749473757843947671')
-        BotLogs.send({ content: "Error occured "+ err })
+        let BotLogs = this.client.channels.cache.get(BOTLOGS)
+        BotLogs.send({ content: "Error occured "+ err + " by <@" + this.message.author.id + "> in <#" + this.message.channel+ ">"})
+        this.message.reply("Error occured "+ err);
     }
 };
