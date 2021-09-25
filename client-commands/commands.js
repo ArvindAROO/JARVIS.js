@@ -2,9 +2,15 @@ const BOTDEV = 750556082371559485;
 const MOD = 742798158966292640;
 const ADMIN = 742800061280550923;
 const BOTLOGS = '749473757843947671';
+const API_KEY = process.env.API_KEY;
+
+
 
 let ms = require('ms');
+let axios = require("axios").default;
 
+// let base64ToImage = require('base64-to-image');
+// import axios from "axios";
 module.exports = {
     init: function(client) {
         this.client = client;
@@ -243,6 +249,39 @@ module.exports = {
 
         }
 
+    },
+
+    joke: function(message){
+        // !The command is pretty irrelevant in the context of the bot, just wanted to try out api calls in Js. Added it into the bot
+
+        //the api used is DAD-JOKES api via rapidapi.com
+        //further info can be found at https://rapidapi.com/KegenGuyll/api/dad-jokes
+        this.message = message;
+        var options = {
+            method: 'GET',
+            url: 'https://dad-jokes.p.rapidapi.com/random/joke/png',
+            headers: {
+                'x-rapidapi-host': 'dad-jokes.p.rapidapi.com',
+                'x-rapidapi-key': API_KEY
+            }
+        };
+
+        axios.request(options).then(function (response) {
+            //console.log(response.data.body) //uncomment this line to see the entire body of joke
+            let joke = response.data.body.setup + "\n\n\n" + response.data.body.punchline
+            message.reply(joke);
+            
+            
+            //the joke also sends the text of the joke as a image, pretty useless in darkmode since text in black
+
+            // var path ='path/to the/repo';
+            // var optionalObj = {'fileName': 'image.png', 'type':'png'};
+
+            // var imageInfo = base64ToImage(response.data.body.image,path,optionalObj);
+
+            // message.channel.send("", {files: ["../image.png"]});
+            //T he image isnt useful in the context of sending it as a image on discord since it almost unreadable
+        })
     },
     support: function(message) {
         this.message = message;
