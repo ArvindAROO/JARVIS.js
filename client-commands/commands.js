@@ -204,7 +204,7 @@ module.exports = {
     kid: function(message, args) {
         this.message = message;
         if (args[0]) {
-            const userObj = this.getUserFromMention(message, args[0]);
+            const userObj = message.mentions.members.first()
             if (this.canManageServer(message)) {
                 if (!userObj) {
                     return message.reply("Mention the user");
@@ -234,7 +234,7 @@ module.exports = {
     nick: function(message, args) {
         this.message = message;
         if (args[0]) {
-            const userObj = this.getUserFromMention(message, args[0]);
+            const userObj = message.mentions.members.first()
             if (this.canManageServer(message)) {
                 if (!userObj) {
                     return message.reply("Mention the user");
@@ -250,7 +250,20 @@ module.exports = {
         }
 
     },
-
+    echo:function(message, args){
+        //syntax - `+e <#channelname> whatever to be echoed
+        this.message = message;
+        if (message.author.id == 718845827413442692) { // still too unsafe to give others perms to use the command
+            let channel = message.mentions.channels;
+            let channelID = channel.keys().next().value;
+            if(channelID == undefined){
+                return message.reply("Mention the channel")
+            } 
+            let channelObj = this.client.channels.cache.get(channelID); 
+            args.shift() //remove the first element ie the channel mention
+            return channelObj.send(args.join(" "))
+        }
+    },
     joke: function(message){
         // !The command is pretty irrelevant in the context of the bot, just wanted to try out api calls in Js. Added it into the bot
 
@@ -280,7 +293,7 @@ module.exports = {
             // var imageInfo = base64ToImage(response.data.body.image,path,optionalObj);
 
             // message.channel.send("", {files: ["../image.png"]});
-            //T he image isnt useful in the context of sending it as a image on discord since it almost unreadable
+            // The image isnt useful in the context of sending it as a image on discord since it almost unreadable
         })
     },
     support: function(message) {
