@@ -12,6 +12,7 @@
         "nick", "changenick",
         "ban", "unban",
         "purge", "p",
+        "echo", "e",
         "joke"
     ]
   }

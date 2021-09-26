@@ -62,6 +62,8 @@ client.on("messageCreate", (message) => {
             commandFunctions.unban(message, args);
         } else if (command == "p" || command == "purge") {
             commandFunctions.purge(message, args);
+        } else if (command == "e" || command == "echo"){
+            commandFunctions.echo(message, args);
         } else if (command == "joke"){
             commandFunctions.joke(message);
         }
