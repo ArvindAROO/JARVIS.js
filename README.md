@@ -18,17 +18,21 @@ npm install
 TOKEN = "Your Bot Token"
 API_KEY = "your API key" 
 ```
-TOKEN is your discord bot's token
+    TOKEN is your discord bot's token
 
-API_KEY is the key for your auth in rapidapi.com for `+joke` command
+    API_KEY is the key for your auth in rapidapi.com for `+joke` command
 
-Further info of the API and docs - https://rapidapi.com/KegenGuyll/api/dad-jokes
+    Further info of the API and docs - https://rapidapi.com/KegenGuyll/api/dad-jokes
 
 4. Set up the `config.json` file with the following details like `prefix` and allowed commands
 
-`botManagers` is the array of role IDs who will have full access to all moderation commands
+    `botManagers` is the array of role IDs who will have full access to all moderation commands
 
-`botLogs` is the channel ID of the logs channel
+    `botLogs` is the channel ID of the logs channel
+     
+     Sample:
+     ![image](https://user-images.githubusercontent.com/54891738/134855229-bcb3ac63-3f34-4724-a79a-736556b0af94.png)
+
 
 5. Run the bot using
 ```
