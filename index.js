@@ -36,6 +36,7 @@ client.once("ready", () => {
 });
 
 client.on("messageCreate", (message) => {
+
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     //ignore if no prefix
 
@@ -66,6 +67,8 @@ client.on("messageCreate", (message) => {
             commandFunctions.echo(message, args);
         } else if (command == "joke"){
             commandFunctions.joke(message);
+        } else if (command == "thread"){
+            commandFunctions.thread(message, args);
         }
     } else {
         message.channel.send({

@@ -1,10 +1,9 @@
-const BOTDEV = 750556082371559485;
-const MOD = 742798158966292640;
-const ADMIN = 742800061280550923;
-const BOTLOGS = '749473757843947671';
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.API_KEY; // API keys for dad jokes API
 
-
+//get moderation roles and channel ID
+const config = require('../config.json');
+const canManageBot = config["botManagers"];
+const BOTLOGS = config["botLogs"];
 
 let ms = require('ms');
 let axios = require("axios").default;
@@ -19,7 +18,7 @@ module.exports = {
     canManageServer: function(message) {
         //see if the current message author is worthy of the command
         return message.member.roles.cache.some(
-            (role) => role.id == BOTDEV || role.id == MOD || role.id == ADMIN
+            (role) => canManageBot.includes(role.id) 
         );
     },
     ping: function(message) {
@@ -98,7 +97,7 @@ module.exports = {
                 return message.reply("Mention the user");
             }
         } else {
-            return messagereply("No");
+            return message.reply("No");
         }
     },
 
@@ -125,7 +124,7 @@ module.exports = {
                 return message.reply("Mention the number of messages to be purged");
             }
         } else {
-            return messagereply("No");
+            return message.reply("No");
         }
     },
 
@@ -253,15 +252,21 @@ module.exports = {
     echo:function(message, args){
         //syntax - `+e <#channelname> whatever to be echoed
         this.message = message;
-        if (message.author.id == 718845827413442692) { // still too unsafe to give others perms to use the command
-            let channel = message.mentions.channels;
-            let channelID = channel.keys().next().value;
-            if(channelID == undefined){
-                return message.reply("Mention the channel")
-            } 
-            let channelObj = this.client.channels.cache.get(channelID); 
-            args.shift() //remove the first element ie the channel mention
-            return channelObj.send(args.join(" "))
+        if (message.author.id == 718845827413442692) {
+            if (args[0]) {
+                // still too unsafe to give others perms to use the command
+                let channel = message.mentions.channels;
+                let channelID = channel.keys().next().value;
+                if(channelID == undefined){
+                    return message.reply("Mention the channel")
+                } 
+                let channelObj = this.client.channels.cache.get(channelID); 
+                args.shift() //remove the first element ie the channel mention
+                return channelObj.send(args.join(" "))
+            }
+            message.reply("what should i even echo");
+        } else {
+            message.reply("Not to you lol");
         }
     },
     joke: function(message){
@@ -296,6 +301,46 @@ module.exports = {
             // The image isnt useful in the context of sending it as a image on discord since it almost unreadable
         })
     },
+    thread: function(message, args){
+        //syntax - `+thread <channel mention> <thread mention> whatever message
+        //! the thread must be of the same channel as the channel mentioned
+        if (this.canManageServer(message)) {
+            this.message = message;
+            let channel = message.mentions.channels;
+            let channelID = channel.keys().next().value;
+            let threadID = undefined;
+            let i = 0;
+            for (let [key, v] of channel) {
+                //basically channel[1]
+                //but map object doesnt support indexing
+                if(i == 1){threadID = key; break;}
+                i++;
+            }
+            if(channelID == undefined){
+                return message.reply("Mention the channel")
+            }
+            if(threadID == undefined){
+                return message.reply("Mention thread");
+            }
+            
+            channel = this.client.channels.cache.get(channelID)
+            if(channel){
+                const thread = channel.threads.cache.find(x => x.id === threadID.toString());
+                args.shift();
+                args.shift();
+                // remove the first 2 parameters ie channel and thread mentions
+                string = args.join(" ");
+                if(!string){return message.reply("Empty message received");} //if string not found
+                if(thread){
+                    return thread.send(string);
+                }
+                return message.reply("no threads found");
+            }
+            return message.reply("channel not found");
+        
+        }
+    },
+
     support: function(message) {
         this.message = message;
         return message.reply("You can contribute to the bot here\nhttps://github.com/ArvindAROO/JARVIS.js")
