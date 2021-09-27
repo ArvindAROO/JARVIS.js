@@ -22,7 +22,13 @@ TOKEN is your discord bot's token
 API_KEY is the key for your auth in rapidapi.com for `+joke` command
 Further info of the API and docs - https://rapidapi.com/KegenGuyll/api/dad-jokes
 
-4. Run the bot using
+4. Set up the `config.json` file with the following details like `prefix` and allowed commands
+
+`botManagers` is the array of role IDs who will have full access to all moderation commands
+
+`botLogs` is the channel ID of the logs channel
+
+5. Run the bot using
 ```
 node index.js
 ```
