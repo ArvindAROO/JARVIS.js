@@ -31,6 +31,7 @@ API_KEY = "your API key"
     `botLogs` is the channel ID of the logs channel
      
      Sample:
+     
      ![image](https://user-images.githubusercontent.com/54891738/134855229-bcb3ac63-3f34-4724-a79a-736556b0af94.png)
 
 
