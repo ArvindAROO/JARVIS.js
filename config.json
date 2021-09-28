@@ -2,8 +2,6 @@
     "prefix": "+",
     "commands": [
         "ping",
-        "beep",
-        "hello",
         "mute",
         "unmute",
         "kick",
@@ -24,4 +22,3 @@
     "botLogs" : "749473757843947671"
 
 }
-  
