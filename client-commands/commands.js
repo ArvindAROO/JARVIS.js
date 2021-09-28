@@ -106,7 +106,7 @@ module.exports = {
         if (this.canManageServer(message)) {
             if (args[0]) {
                 let messageCount = 1 + Number(args);
-                // if(Number.isNaN(messageCount)|| messageCount < 1){return message.reply("purge what?")}
+                if(Number.isNaN(messageCount)|| messageCount < 1){return message.reply("purge what?")}
                 message.channel.messages.fetch({
                         limit: messageCount
                     })
@@ -160,7 +160,7 @@ module.exports = {
                     content: "ban successful"
                 });
             }
-            message.reply("Mention properly lawda. Last time you didnt mention properly dear PESU bot was kicked");
+            message.reply("Mention properly lawda. Last time you didn't mention properly dear PESU bot was kicked");
         }
     },
 
@@ -251,6 +251,7 @@ module.exports = {
     },
     echo:function(message, args){
         //syntax - `+e <#channelname> whatever to be echoed
+        //paste the required attachment along with that
         this.message = message;
         if (message.author.id == 718845827413442692) {
             if (args[0]) {
@@ -261,8 +262,12 @@ module.exports = {
                     return message.reply("Mention the channel")
                 } 
                 let channelObj = this.client.channels.cache.get(channelID); 
-                args.shift() //remove the first element ie the channel mention
-                return channelObj.send(args.join(" "))
+                args.shift() //remove the first element i.e the channel mention
+                channelObj.send(args.join(" "))
+                for (let [key, value] of message.attachments) {
+                    channelObj.send(value.url);
+                }
+                return
             }
             message.reply("what should i even echo");
         } else {
@@ -298,7 +303,7 @@ module.exports = {
             // var imageInfo = base64ToImage(response.data.body.image,path,optionalObj);
 
             // message.channel.send("", {files: ["../image.png"]});
-            // The image isnt useful in the context of sending it as a image on discord since it almost unreadable
+            // The image isn't useful in the context of sending it as a image on discord since it almost unreadable
         })
     },
     thread: function(message, args){
@@ -312,7 +317,7 @@ module.exports = {
             let i = 0;
             for (let [key, v] of channel) {
                 //basically channel[1]
-                //but map object doesnt support indexing
+                //but map object doesn't support indexing
                 if(i == 1){threadID = key; break;}
                 i++;
             }
@@ -332,11 +337,12 @@ module.exports = {
                 string = args.join(" ");
                 if(!string){return message.reply("Empty message received");} //if string not found
                 if(thread){
-                    return thread.send(string);
-                }
-                return message.reply("no threads found");
-            }
-            return message.reply("channel not found");
+                    thread.send(string);
+                    for (let [key, v] of message.attachments) {
+                        thread.send(v.url);
+                    }
+                } else {return message.reply("no threads found");}
+            } else { return message.reply("channel not found"); }
         
         }
     },
@@ -348,7 +354,7 @@ module.exports = {
     error: function(err) {
         //upon any errors all will be dumped to BotLogs channel
         let BotLogs = this.client.channels.cache.get(BOTLOGS)
-        BotLogs.send({content: "Error occured " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
-        this.message.reply("Error occured " + err);
+        BotLogs.send({content: "Error occurred " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
+        this.message.reply("Error occurred " + err);
     }
 };
