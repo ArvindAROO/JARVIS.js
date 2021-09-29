@@ -42,6 +42,9 @@ client.on("messageCreate", (message) => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
+    if(message.type == "REPLY"){
+        return message.reply("Dont use the command with a reply");
+    }
     if (availableCommands.includes(command)) {
         if (command === "ping") {
             commandFunctions.ping(message);
