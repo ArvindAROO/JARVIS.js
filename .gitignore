@@ -9,8 +9,6 @@ temp.txt
 .env
 *.env
 
-#package-lock
-package-lock.json
 
 #.eslintrc 
 .eslintrc.json
