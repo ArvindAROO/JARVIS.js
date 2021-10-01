@@ -139,7 +139,7 @@ module.exports = {
                 }
                 userObj.kick();
                 return message.channel.send({
-                    content: "kick successful"
+                    content: "successfully kicked " + userObj.displayName
                 });
             }
             message.reply("User Not Found, mention properly");
@@ -353,8 +353,12 @@ module.exports = {
     },
     error: function(err) {
         //upon any errors all will be dumped to BotLogs channel
-        let BotLogs = this.client.channels.cache.get(BOTLOGS)
-        BotLogs.send({content: "Error occurred " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
-        this.message.reply("Error occurred " + err);
+        if(this.message && this.client){
+            let BotLogs = this.client.channels.cache.get(BOTLOGS)
+            BotLogs.send({content: "Error occurred " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
+            this.message.reply("Error occurred " + err);
+        } else {
+            console.log("Invalid token or network issue detected");
+        }
     }
 };
