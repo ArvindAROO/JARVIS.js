@@ -1,6 +1,17 @@
 # JARVIS.js
 J.A.R.V.I.S rewrite in discord.js
 
+
+<p align="center">
+    <a href="https://github.com/ArvindAroo/JARVIS.js/actions" alt="Build status">
+    <img src="https://github.com/ArvindAroo/JARVIS.js/actions/workflows/node.js.yml/badge.svg"/></a>
+    <a href="https://github.com/ArvindAROO/JARVIS.js/blob/main/LICENSE" alt="License">
+    <img alt="Github License" src="https://img.shields.io/github/license/ArvindAroo/JARVIS.js"></a>
+    <a href="https://github.com/ArvindAroo/JARVIS.js/stargazers" alt="Stars">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/ArvindAroo/JARVIS.js"></a>
+</p>
+
+
 # Running the code
 
 1. clone the repo using the command 
