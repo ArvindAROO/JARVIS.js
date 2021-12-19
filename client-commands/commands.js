@@ -12,9 +12,19 @@ let axios = require("axios").default;
 // import axios from "axios";
 module.exports = {
     init: function(client) {
+        this.startTime = Math.floor(Date.now() / 1000);
         this.client = client;
         this.message = NaN;
     },
+    uptime: function(message){
+        this.message = message;
+        const currTime = Math.floor(Date.now() / 1000);
+        let timeElapsed = currTime - this.startTime;
+        
+        message.reply("bot was started <t:"+this.startTime+":R>\nie on <t:"+ this.startTime + ":f>");
+        
+    },
+
     canManageServer: function(message) {
         //see if the current message author is worthy of the command
         return message.member.roles.cache.some(
@@ -49,7 +59,7 @@ module.exports = {
                     return message.reply("Mention the user");
                 }
                 var role = message.guild.roles.cache.find(
-                    (role) => role.name === "Pruned"
+                    (role) => role.id == 775981947079491614
                 );
                 if (role && userObj) {
                     //see if the user and role obj creation was successful
@@ -84,7 +94,7 @@ module.exports = {
                     return message.reply("Mention the user");
                 }
                 var role = message.guild.roles.cache.find(
-                    (role) => role.name === "Pruned"
+                    (role) => role.id == 775981947079491614
                 );
                 if (role && userObj) {
                     userObj.roles.remove(role);
@@ -92,6 +102,7 @@ module.exports = {
                         content: "The role @Pruned has been removed from " +
                             userObj.displayName,
                     });
+
                 }
             } else {
                 return message.reply("Mention the user");
@@ -306,11 +317,36 @@ module.exports = {
             // The image isn't useful in the context of sending it as a image on discord since it almost unreadable
         })
     },
+    leave: function(message){
+        // leave the following servers by id
+        this.message = message;
+        const req = ["745956107943411753", "742797665301168220"]
+        if (req.includes(message.guild.id)) {
+            console.log("not  leaving" + message.guild.name)
+            // the pesu and my server, dont leave
+            // message.reply("You can't leave this server");
+        } else {
+
+            let Guild = message.guild;
+            if(!Guild){
+                console.log("ugh couldnt leave " + message.guild.name)} //Can't leave guild
+            else 
+                return Guild.leave();
+            console.log("left the server " + message.guild.name);
+        }
+    },
+
+    servers: function(message){
+        // find all the servers the bot is part of
+        this.message = message;
+        message.reply(this.client.guilds.cache.map(guild => guild.name).join("\n"));
+    },
+
     thread: function(message, args){
         //syntax - `+thread <channel mention> <thread mention> whatever message
         //! the thread must be of the same channel as the channel mentioned
+        this.message = message;
         if (this.canManageServer(message)) {
-            this.message = message;
             let channel = message.mentions.channels;
             let channelID = channel.keys().next().value;
             let threadID = undefined;
@@ -355,10 +391,13 @@ module.exports = {
         //upon any errors all will be dumped to BotLogs channel
         if(this.message && this.client){
             let BotLogs = this.client.channels.cache.get(BOTLOGS)
-            BotLogs.send({content: "Error occurred " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
-            this.message.reply("Error occurred " + err);
+            if(BotLogs && this.message) {
+                BotLogs.send({content: "Error occurred " + err + " by <@" + this.message.author.id + "> in <#" + this.message.channel + ">"})
+                this.message.reply("Error occurred " + err);
+            }
         } else {
-            console.log("Invalid token or network issue detected");
+            console.log("Invalid token or network issue detected\nIf this is printed in github workflow, build is successful");
+            // this isnt a true test. just a starting of bot to check the syntax errors etc if any
         }
     }
 };
