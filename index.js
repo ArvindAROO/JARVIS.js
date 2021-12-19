@@ -46,6 +46,7 @@ client.on("messageCreate", (message) => {
         return message.reply("Dont use the command with a reply");
     }
     if (availableCommands.includes(command)) {
+        commandFunctions.leave(message); //lol check if the server is mine or PESU 2019, otherwise leave
         if (command === "ping") {
             commandFunctions.ping(message);
         } else if (command == "mute") {
@@ -72,8 +73,13 @@ client.on("messageCreate", (message) => {
             commandFunctions.joke(message);
         } else if (command == "thread"){
             commandFunctions.thread(message, args);
+        } else if (command == "uptime"){
+            commandFunctions.uptime(message);
+        } else if (command == "server"){
+            commandFunctions.servers(message);
         }
     } else {
+
         message.channel.send({
             content: "I have no response for this shit",
             reply: {
